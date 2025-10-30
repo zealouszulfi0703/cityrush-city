@@ -1,20 +1,30 @@
 import { GoogleGenAI } from "@google/genai";
 
+// --- START: CRITICAL FIX FOR BROWSER DEPLOYMENT ---
+
 // Safely access the API key to prevent crashes in a browser environment
 const API_KEY = (typeof process !== 'undefined' && process.env) ? process.env.API_KEY : undefined;
 
-if (!API_KEY) {
-  // This warning is now safe to run in the browser.
-  console.warn("API_KEY is not available in this environment. AI features will be disabled.");
+// Declare the `ai` instance but do not initialize it yet.
+let ai: GoogleGenAI | null = null;
+
+// Only initialize the GoogleGenAI client if the API key exists.
+// This prevents a crash when `process.env.API_KEY` is undefined in the browser.
+if (API_KEY) {
+  ai = new GoogleGenAI({ apiKey: API_KEY });
+} else {
+  // This warning is now safe to run in the browser and informs the developer.
+  console.warn("Gemini API key is not available. AI-powered features will be disabled.");
 }
 
-// Initialize with the key, which might be undefined. The SDK can handle this.
-const ai = new GoogleGenAI({ apiKey: API_KEY! });
+// --- END: CRITICAL FIX ---
 
 export const getBangaloreRaceTip = async (): Promise<string> => {
-  // If the API key isn't set, don't even try to make the API call.
-  if (!API_KEY) {
-    return "Remember to stay hydrated and watch out for the city's dynamic traffic!";
+  const defaultTip = "Remember to stay hydrated and watch out for the city's dynamic traffic!";
+  
+  // If the `ai` client was never initialized, return the default tip immediately.
+  if (!ai) {
+    return defaultTip;
   }
 
   try {
@@ -25,9 +35,10 @@ export const getBangaloreRaceTip = async (): Promise<string> => {
       contents: prompt,
     });
     
-    return response.text.trim();
+    // Ensure we have text before trimming
+    return response.text ? response.text.trim() : defaultTip;
   } catch (error) {
     console.error("Error fetching race tip from Gemini API:", error);
-    return "Remember to stay hydrated and watch out for the city's dynamic traffic!";
+    return defaultTip;
   }
 };
