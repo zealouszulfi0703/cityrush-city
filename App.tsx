@@ -1,12 +1,13 @@
+
 import React, { useState, useCallback, useEffect } from 'react';
-import { GameScreen, GameState, GameMode, User } from './types';
-import LobbyScreen from './components/LobbyScreen';
-import PreRaceScreen from './components/PreRaceScreen';
-import GameplayScreen from './components/GameplayScreen';
-import DeploymentGuide from './components/DeploymentGuide';
-import LoginScreen from './components/LoginScreen';
+import { GameScreen, GameState, GameMode, User } from './types.ts';
+import LobbyScreen from './components/LobbyScreen.tsx';
+import PreRaceScreen from './components/PreRaceScreen.tsx';
+import GameplayScreen from './components/GameplayScreen.tsx';
+import DeploymentGuide from './components/DeploymentGuide.tsx';
+import LoginScreen from './components/LoginScreen.tsx';
 import { Bike, Car, Bot, Users, User as UserIcon, LogOut } from 'lucide-react';
-import { IS_PRODUCTION } from './config/environment';
+import { IS_PRODUCTION } from './config/environment.ts';
 
 const App: React.FC = () => {
   const [gameState, setGameState] = useState<GameState>({ screen: GameScreen.Lobby });

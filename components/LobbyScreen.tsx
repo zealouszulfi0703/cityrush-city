@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { GameMode } from '../types';
+import { GameMode } from '../types.ts';
 import { Bike, Compass, Trophy } from 'lucide-react';
 
 interface LobbyScreenProps {

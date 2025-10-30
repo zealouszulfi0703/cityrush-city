@@ -1,5 +1,6 @@
+
 import React from 'react';
-import { GameMode, User } from '../types';
+import { GameMode, User } from '../types.ts';
 
 interface GameplayScreenProps {
   mode: GameMode;

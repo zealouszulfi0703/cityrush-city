@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
-import { GameMode } from '../types';
-import { getBangaloreRaceTip } from '../services/geminiService';
+import { GameMode } from '../types.ts';
+import { getBangaloreRaceTip } from '../services/geminiService.ts';
 import { Sun, Cloud, Wind, TrafficCone, Wrench, ArrowLeft, Lightbulb, Bot } from 'lucide-react';
 
 interface PreRaceScreenProps {

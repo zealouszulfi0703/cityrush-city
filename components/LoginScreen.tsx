@@ -1,5 +1,6 @@
+
 import React from 'react';
-import { User } from '../types';
+import { User } from '../types.ts';
 import { ShieldCheck, User as UserIcon } from 'lucide-react';
 
 interface LoginScreenProps {
