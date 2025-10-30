@@ -1,34 +1,16 @@
 
 import { GoogleGenAI } from "@google/genai";
 
-// --- START: CRITICAL FIX FOR BROWSER DEPLOYMENT ---
-
-// Safely access the API key to prevent crashes in a browser environment
-const API_KEY = (typeof process !== 'undefined' && process.env) ? process.env.API_KEY : undefined;
-
-// Declare the `ai` instance but do not initialize it yet.
-let ai: GoogleGenAI | null = null;
-
-// Only initialize the GoogleGenAI client if the API key exists.
-// This prevents a crash when `process.env.API_KEY` is undefined in the browser.
-if (API_KEY) {
-  ai = new GoogleGenAI({ apiKey: API_KEY });
-} else {
-  // This warning is now safe to run in the browser and informs the developer.
-  console.warn("Gemini API key is not available. AI-powered features will be disabled.");
-}
-
-// --- END: CRITICAL FIX ---
+// Initialize the GoogleGenAI client directly.
+// The execution environment is responsible for providing the API key.
+const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 export const getBangaloreRaceTip = async (): Promise<string> => {
   const defaultTip = "Remember to stay hydrated and watch out for the city's dynamic traffic!";
   
-  // If the `ai` client was never initialized, return the default tip immediately.
-  if (!ai) {
-    return defaultTip;
-  }
-
   try {
+    // A check for the API key is not needed here, as the environment provides it.
+    // If the call fails for any reason, the catch block will handle it gracefully.
     const prompt = `Give me a creative, one-sentence bicycle racing tip for a race in Bangalore, India. Mention a specific, famous landmark like Cubbon Park, Vidhana Soudha, or Lalbagh. Keep it concise and encouraging.`;
 
     const response = await ai.models.generateContent({
@@ -36,10 +18,12 @@ export const getBangaloreRaceTip = async (): Promise<string> => {
       contents: prompt,
     });
     
-    // Ensure we have text before trimming
-    return response.text ? response.text.trim() : defaultTip;
+    // Use the .text property directly to get the response string.
+    return response.text?.trim() || defaultTip;
   } catch (error) {
     console.error("Error fetching race tip from Gemini API:", error);
+    // If the API call fails, we will fall back to the default tip.
+    // The user experience is not interrupted.
     return defaultTip;
   }
 };
