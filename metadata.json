@@ -1,0 +1,7 @@
+{
+  "name": "City Rush City",
+  "description": "An MVP for a modular racing game set on the streets of Bangalore, India. This initial version focuses on bicycle racing and showcases game modes, real-time conditions, and AI-powered tips.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
